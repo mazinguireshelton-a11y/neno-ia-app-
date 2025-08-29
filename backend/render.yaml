@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: neno-ia-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: neno-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: neno-redis
+          property: connectionString
+
+databases:
+  - name: neno-db
+    plan: free
+    databaseName: neno
+    user: neno_user
+
+redis:
+  - name: neno-redis
+    plan: free
+    ipAllowList: []

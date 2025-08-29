@@ -12,7 +12,7 @@ import requests
 from flask import Blueprint, request, jsonify, current_app
 
 # Import das constantes atualizadas
-from backend.utils.constants import SUPPORTED_LANGUAGES, MODES, DEFAULT_MODE_CONFIGS
+from utils.constants import SUPPORTED_LANGUAGES, MODES, DEFAULT_MODE_CONFIGS
 
 voice_bp = Blueprint("voice_bp", __name__)
 

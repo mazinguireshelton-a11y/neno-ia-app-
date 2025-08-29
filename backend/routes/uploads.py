@@ -9,7 +9,7 @@ from typing import List
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 
-from backend.services.file_service import extract_text_from_file
+from services.file_service import extract_text_from_file
 
 uploads_bp = Blueprint("uploads_bp", __name__)
 

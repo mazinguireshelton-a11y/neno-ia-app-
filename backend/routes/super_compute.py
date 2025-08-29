@@ -1,9 +1,10 @@
+from services.compute.cluster import compute_cluster
 # backend/routes/super_compute.py
 from flask import Blueprint, request, jsonify
-from backend.services.compute_cluster import compute_cluster
-from backend.services.smart_optimizer import smart_optimizer
-from backend.plugins.super_ai_module import SuperAIModule
-from backend.plugins.viz_engine import VisualizationEngine
+from services.compute.cluster import compute_cluster
+from services.smart_optimizer import smart_optimizer
+from plugins.super_ai_module import SuperAIModule
+from plugins.viz_engine import VisualizationEngine
 import time
 import os
 import logging

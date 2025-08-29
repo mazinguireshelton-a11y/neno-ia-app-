@@ -8,7 +8,7 @@ import time
 from typing import Dict, Any, List
 import logging
 import os
-from backend.services.compute_cluster import compute_cluster
+from services.compute_cluster import compute_cluster
 
 logger = logging.getLogger(__name__)
 

@@ -1,29 +1,27 @@
 import os
-from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    # Diretórios
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    UPLOAD_DIR = BASE_DIR / "uploads"
-    DATA_DIR = BASE_DIR / "data"
-    LOG_DIR = BASE_DIR / "logs"
+    # Database
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
     
-    # LLM Providers
-    LLM_CONFIG = {
-        'openai': {
-            'api_key': os.getenv('OPENAI_API_KEY'),
-            'model': os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
-        },
-        'openrouter': {
-            'api_key': os.getenv('OPENROUTER_API_KEY'),
-            'model': os.getenv('OPENROUTER_MODEL', 'openai/gpt-4o-mini')
-        },
-        'groq': {
-            'api_key': os.getenv('GROQ_API_KEY'), 
-            'model': os.getenv('GROQ_MODEL', 'llama-3.1-70b-versatile')
-        }
-    }
+    # Redis
+    REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
     
-    # Segurança
-    MAX_FILE_SIZE = 25 * 1024 * 1024  # 25MB
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'docx', 'jpg', 'jpeg', 'png'}
+    # API Keys
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY") 
+    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+    
+    # App
+    SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-key-change-in-production")
+    ALGORITHM = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
+    
+    # Deployment
+    ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+    DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+config = Config()

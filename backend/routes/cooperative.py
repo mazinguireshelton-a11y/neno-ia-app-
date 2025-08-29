@@ -1,5 +1,6 @@
+from services.compute.cluster import compute_cluster
 from flask import Blueprint, request, jsonify
-from backend.services import llm_service
+from services import llm_service
 import asyncio
 
 cooperative_bp = Blueprint('cooperative_bp', __name__)

@@ -1,3 +1,4 @@
+from services.providers.router import ProviderRouter
 """
 Serviço centralizado para gerenciamento de modelos de linguagem
 """
