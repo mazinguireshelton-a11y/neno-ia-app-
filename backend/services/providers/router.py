@@ -2,9 +2,9 @@ from services.cognitive_absorber import cognitive_absorber
 from services.knowledge_fusion.fusion_engine import fusion_engine
 from services.quality_optimization.quality_enhancer import quality_enhancer
 from typing import Dict, List, Any, Generator, Optional
-from .openai import OpenAIProvider
-from .groq import GroqProvider
-from .openrouter import OpenRouterProvider
+from .openai_provider import OpenAIProvider
+from .groq_provider import GroqProvider
+from .openrouter_provider import OpenRouterProvider
 import os
 import logging
 
@@ -108,5 +108,8 @@ class ProviderRouter:
         
         # Seleção inteligente de modelo padrão baseado no provider
         if not model:
-            model = self._get_default_model(provider_instance)
+                
         
+            def list_available_providers(self) -> List[str]:
+                """Lista todos os providers disponíveis"""
+                return list(self.providers.keys())

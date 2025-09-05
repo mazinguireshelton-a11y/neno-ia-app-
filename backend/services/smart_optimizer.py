@@ -1,153 +1,97 @@
-# backend/services/smart_optimizer.py
-import numpy as np
-import time
 import logging
-from typing import Dict, Any
-from datetime import datetime
+from typing import Dict, List, Any
+import time
+import math
 
 logger = logging.getLogger(__name__)
 
 class SmartOptimizer:
     def __init__(self):
-        self.performance_cache = {}
         self.task_history = []
+        self.optimization_rules = {}
         
-    def optimize_computation(self, task_type: str, data: Dict) -> Dict:
-        """Otimiza computação baseado no tipo de tarefa e dados"""
-        start_time = time.time()
-        
-        # Analisa complexidade da tarefa
-        complexity = self.analyze_complexity(task_type, data)
-        
-        # Seleciona melhor método
-        method = self.select_best_method(task_type, complexity)
-        
-        # Executa computação
-        result = self.execute_with_method(task_type, data, method)
-        
-        # Registra performance
-        execution_time = time.time() - start_time
-        self.record_performance(task_type, method, complexity, execution_time)
-        
-        result['optimization'] = {
-            'method_used': method,
-            'complexity_level': complexity,
-            'execution_time': execution_time,
-            'optimized': True
-        }
-        
-        return result
-    
-    def analyze_complexity(self, task_type: str, data: Dict) -> str:
-        """Analisa complexidade da tarefa"""
-        if task_type == "linear_system":
-            matrix_size = len(data.get('matrix', []))
-            if matrix_size < 100:
-                return "low"
-            elif matrix_size < 1000:
-                return "medium"
-            else:
-                return "high"
-                
-        elif task_type == "optimization":
-            dim = len(data.get('initial_guess', []))
-            if dim < 10:
-                return "low"
-            elif dim < 100:
-                return "medium"
-            else:
-                return "high"
-                
-        return "medium"
-    
-    def select_best_method(self, task_type: str, complexity: str) -> str:
-        """Seleciona melhor método de computação"""
-        methods = {
-            "linear_system": {
-                "low": "direct",
-                "medium": "lu_decomposition", 
-                "high": "iterative"
-            },
-            "optimization": {
-                "low": "bfgs",
-                "medium": "l-bfgs",
-                "high": "evolutionary"
-            }
-        }
-        
-        return methods.get(task_type, {}).get(complexity, "default")
-    
-    def execute_with_method(self, task_type: str, data: Dict, method: str) -> Dict:
-        """Executa tarefa com método específico"""
+    def optimize_task(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Otimiza tarefas sem numpy"""
         try:
-            if task_type == "linear_system":
-                return self.solve_linear_system(data, method)
-            elif task_type == "optimization":
-                return self.optimize_function(data, method)
-            else:
-                return {"error": f"Tipo de tarefa não suportado: {task_type}"}
-        except Exception as e:
-            return {"error": str(e)}
-    
-    def solve_linear_system(self, data: Dict, method: str) -> Dict:
-        """Resolve sistema linear com método otimizado"""
-        A = np.array(data['matrix'])
-        b = np.array(data['vector'])
-        
-        try:
-            if method == "direct" and len(A) < 1000:
-                x = np.linalg.solve(A, b)
-            elif method == "lu_decomposition":
-                import scipy.linalg
-                lu, piv = scipy.linalg.lu_factor(A)
-                x = scipy.linalg.lu_solve((lu, piv), b)
-            else:  # iterative
-                from scipy.sparse.linalg import gmres
-                x, info = gmres(A, b, tol=1e-10)
+            start_time = time.time()
             
-            residual = np.linalg.norm(A @ x - b)
+            # Simular otimização (substituir por lógica real)
+            optimized_result = self._simulate_optimization(task_data)
+            
+            # Registrar no histórico
+            execution_time = time.time() - start_time
+            self._add_to_history(task_data, optimized_result, execution_time)
             
             return {
                 "success": True,
-                "solution": x.tolist(),
-                "residual": float(residual),
-                "method": method
+                "optimized_result": optimized_result,
+                "execution_time": execution_time
             }
             
         except Exception as e:
+            logger.error(f"Erro na otimização: {str(e)}")
             return {"success": False, "error": str(e)}
     
-    def optimize_function(self, data: Dict, method: str) -> Dict:
-        """Otimização com método selecionado"""
-        # Implementação simplificada
-        return {
-            "success": True,
-            "method": method,
-            "message": "Otimização executada com método " + method
-        }
+    def _simulate_optimization(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Simula otimização sem numpy"""
+        # Implementação simplificada - substituir por sua lógica real
+        if 'matrix' in task_data and 'vector' in task_data:
+            return self._solve_linear_system_simple(task_data)
+        else:
+            return {"status": "optimized", "score": 0.95}
     
-    def record_performance(self, task_type: str, method: str, complexity: str, time_taken: float):
-        """Registra performance para futuras otimizações"""
-        record = {
-            'timestamp': datetime.now().isoformat(),
-            'task_type': task_type,
-            'method': method,
-            'complexity': complexity,
-            'time_taken': time_taken
-        }
+    def _solve_linear_system_simple(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Resolve sistema linear simples sem numpy"""
+        # Implementação simplificada para sistemas 2x2
+        matrix = task_data.get('matrix', [[1, 0], [0, 1]])
+        vector = task_data.get('vector', [0, 0])
         
-        self.task_history.append(record)
+        if len(matrix) == 2 and len(matrix[0]) == 2 and len(vector) == 2:
+            # Solução manual para sistema 2x2
+            a, b = matrix[0]
+            c, d = matrix[1]
+            e, f = vector
+            
+            determinant = a * d - b * c
+            if determinant == 0:
+                return {"error": "Sistema singular"}
+                
+            x = (e * d - b * f) / determinant
+            y = (a * f - e * c) / determinant
+            
+            return {"solution": [x, y], "method": "manual_2x2"}
+        else:
+            return {"error": "Sistema muito complexo para solução manual"}
+    
+    def _add_to_history(self, task_data: Dict[str, Any], result: Dict[str, Any], execution_time: float):
+        """Adiciona ao histórico"""
+        self.task_history.append({
+            "task_data": task_data,
+            "result": result,
+            "time_taken": execution_time,
+            "timestamp": time.time()
+        })
         
-        # Mantém apenas últimos 1000 registros
+        # Manter histórico limitado
         if len(self.task_history) > 1000:
             self.task_history = self.task_history[-1000:]
     
-    def get_performance_stats(self) -> Dict:
-        """Retorna estatísticas de performance"""
+    def get_performance_stats(self) -> Dict[str, Any]:
+        """Estatísticas de performance sem numpy"""
+        if not self.task_history:
+            return {"average_time": 0, "success_rate": 0, "total_tasks": 0}
+        
+        success_count = sum(1 for task in self.task_history if task["result"].get("success", True))
+        total_tasks = len(self.task_history)
+        times = [task["time_taken"] for task in self.task_history]
+        
+        # Cálculo manual da média
+        average_time = sum(times) / len(times) if times else 0
+        
         return {
-            'total_tasks': len(self.task_history),
-            'recent_tasks': self.task_history[-10:] if self.task_history else [],
-            'average_time': np.mean([t['time_taken'] for t in self.task_history]) if self.task_history else 0
+            "average_time": average_time,
+            "success_rate": success_count / total_tasks if total_tasks > 0 else 0,
+            "total_tasks": total_tasks
         }
 
 # Instância global

@@ -58,7 +58,7 @@ class ExtremeQualityEnhancer:
                 "\n\n🎨 **Perspectiva Inovadora**: A abordagem apresenta oportunidades únicas para implementação.",
                 "\n\n🚀 **Potencial de Impacto**: Esta direção tem significante potencial transformador."
             ]
-            response += np.random.choice(creative_enhancements)
+            response += self._random_choice(creative_enhancements)
         
         return response
     
@@ -99,3 +99,4 @@ class ExtremeQualityEnhancer:
 
 # Instância global do otimizador de qualidade
 quality_enhancer = ExtremeQualityEnhancer()
+

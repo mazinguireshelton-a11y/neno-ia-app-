@@ -1,13 +1,6 @@
+from .openai_provider import OpenAIProvider
+from .groq_provider import GroqProvider  
+from .openrouter_provider import OpenRouterProvider
 from .base import BaseProvider
-from .openai import OpenAIProvider
-from .groq import GroqProvider
-from .openrouter import OpenRouterProvider
-from .router import ProviderRouter
 
-__all__ = [
-    'BaseProvider',
-    'OpenAIProvider', 
-    'GroqProvider',
-    'OpenRouterProvider',
-    'ProviderRouter'
-]
+__all__ = ['OpenAIProvider', 'GroqProvider', 'OpenRouterProvider', 'BaseProvider']

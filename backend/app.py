@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-import asyncpg
+# import aiosqlite
 import redis
 import logging
 
@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
     
     # Conectar ao banco
     try:
-        app.state.db = await asyncpg.connect(config.DATABASE_URL)
+        app.state.db = await aiosqlite.connect(config.DATABASE_URL)
         logger.info("✅ Conectado ao banco de dados")
     except Exception as e:
         logger.error(f"❌ Erro ao conectar ao banco: {e}")

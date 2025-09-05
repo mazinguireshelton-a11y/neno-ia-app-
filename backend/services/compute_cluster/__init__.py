@@ -1,14 +1,14 @@
 """
-Compute Cluster Shim - Versão para services.compute.cluster
+Compute Cluster Shim - Versão para services.compute_cluster
 """
-print("🔧 Compute Cluster shim (services.compute.cluster) ativo")
+print("🔧 Compute Cluster shim (services.compute_cluster) ativo")
 
 class ComputeCluster:
     def __init__(self):
         self.name = "Compute Cluster Shim"
         self.workers = []
         self.available = True
-        print("✅ Compute Cluster shim (services.compute.cluster) inicializado")
+        print("✅ Compute Cluster shim (services.compute_cluster) inicializado")
     
     def get_worker_endpoints(self):
         """Retorna endpoints de workers simulados"""

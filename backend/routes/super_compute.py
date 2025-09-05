@@ -3,7 +3,7 @@ from services.compute.cluster import compute_cluster
 from flask import Blueprint, request, jsonify
 from services.compute.cluster import compute_cluster
 from services.smart_optimizer import smart_optimizer
-from plugins.super_ai_module import SuperAIModule
+from plugins.super_ia_module import SuperAIModule
 from plugins.viz_engine import VisualizationEngine
 import time
 import os

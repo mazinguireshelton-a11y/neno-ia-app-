@@ -1,4 +1,3 @@
-import numpy as np
 from typing import Dict, List, Any
 import logging
 
@@ -17,11 +16,16 @@ class CognitiveFusionEngine:
         if not responses:
             return ""
             
+        # Filtrar respostas vazias
+        valid_responses = {k: v for k, v in responses.items() if v and v.strip()}
+        if not valid_responses:
+            return ""
+            
         # Selecionar algoritmo de fusão baseado no tipo de query
-        fusion_algorithm = self._select_fusion_algorithm(query, responses)
+        fusion_algorithm = self._select_fusion_algorithm(query, valid_responses)
         
         # Aplicar fusão
-        fused_response = fusion_algorithm(query, responses)
+        fused_response = fusion_algorithm(query, valid_responses)
         
         return fused_response
     
@@ -57,48 +61,103 @@ class CognitiveFusionEngine:
         return self._reconstruct_response(fused_parts)
     
     def _neural_network_fusion(self, query: str, responses: Dict[str, Any]) -> str:
-        """Fusão por rede neural (simulada)"""
-        # Em produção: Usar modelo transformer real
-        simulated_fusion = f"""🔷 **Resposta com Poder Combinado** 🔷
-
-{responses.get('openai', '')}
-
-⚡ **Otimização Técnica**: {responses.get('groq', '')}
-
-🎨 **Adaptação Avançada**: {responses.get('openrouter', '')}
-
-🧠 **Síntese Cognitiva**: {self._generate_cognitive_synthesis(query, responses)}
-"""
-        return simulated_fusion
+        """Fusão inteligente simulada"""
+        # Simular fusão neural (em produção seria um modelo real)
+        response_parts = []
+        
+        # Adicionar criatividade da OpenAI
+        if "openai" in responses:
+            response_parts.append(f"💡 **Inovação**: {responses['openai']}")
+        
+        # Adicionar precisão da Groq
+        if "groq" in responses:
+            response_parts.append(f"⚡ **Precisão**: {responses['groq']}")
+        
+        # Adicionar adaptabilidade do OpenRouter
+        if "openrouter" in responses:
+            response_parts.append(f"🔄 **Adaptabilidade**: {responses['openrouter']}")
+        
+        # Síntese final
+        if response_parts:
+            response_parts.append(f"\n🎯 **Síntese Cognitiva**: {self._generate_cognitive_synthesis(query, responses)}")
+            return "\n\n".join(response_parts)
+        
+        return "Não foi possível fundir as respostas."
     
     def _evolutionary_optimization_fusion(self, query: str, responses: Dict[str, Any]) -> str:
-        """Fusão por otimização evolutiva"""
-        # Simular processo evolutivo para encontrar melhor combinação
+        """Fusão por otimização evolutiva simulada"""
         best_response = ""
         best_score = 0
         
-        for _ in range(10):  # 10 gerações evolutivas
-            candidate = self._generate_candidate_response(responses)
-            score = self._evaluate_response_quality(candidate, query)
-            
+        # Testar as respostas diretamente (simulação de evolução)
+        for provider, response in responses.items():
+            score = self._evaluate_response_quality(response, query)
             if score > best_score:
                 best_score = score
-                best_response = candidate
+                best_response = response
         
-        return best_response
+        return best_response if best_response else list(responses.values())[0]
     
     def _generate_cognitive_synthesis(self, query: str, responses: Dict[str, Any]) -> str:
         """Gera síntese cognitiva das respostas"""
-        return f"Baseado na análise profunda de {len(responses)} provedores, a resposta ótima combina criatividade excepcional com precisão técnica avançada e adaptabilidade contextual."
+        return f"Baseado na análise integrada de {len(responses)} provedores especializados, esta resposta combina criatividade avançada com precisão técnica e adaptabilidade contextual para oferecer a solução mais completa."
     
     def _calculate_query_complexity(self, query: str) -> float:
         """Calcula complexidade da query"""
-        return min(1.0, len(query.split()) / 50)
+        if not query:
+            return 0.0
+        word_count = len(query.split())
+        return min(1.0, word_count / 50)  # 0.0 a 1.0
     
     def _assess_response_quality(self, responses: Dict[str, Any]) -> float:
         """Avalia qualidade das respostas"""
-        valid_responses = [r for r in responses.values() if r]
-        return min(1.0, len(valid_responses) / 3)
+        valid_responses = [r for r in responses.values() if r and r.strip()]
+        return min(1.0, len(valid_responses) / 3)  # 0.0 a 1.0
+    
+    def _extract_best_sentences(self, response: str, weight: float) -> List[str]:
+        """Extrai melhores sentenças baseado no peso"""
+        if not response:
+            return []
+        
+        sentences = response.split('. ')
+        # Manter sentenças mais relevantes baseado no peso
+        keep_count = max(1, int(len(sentences) * weight))
+        return sentences[:keep_count]
+    
+    def _reconstruct_response(self, sentences: List[str]) -> str:
+        """Reconstrói resposta a partir de sentenças"""
+        if not sentences:
+            return ""
+        
+        # Juntar sentenças e garantir pontuação adequada
+        response = '. '.join(sentences)
+        if not response.endswith('.'):
+            response += '.'
+        return response
+    
+    def _evaluate_response_quality(self, response: str, query: str) -> float:
+        """Avalia qualidade de uma resposta"""
+        if not response:
+            return 0.0
+        
+        score = 0.0
+        # Comprimento adequado
+        response_length = len(response)
+        if 50 <= response_length <= 1000:
+            score += 0.3
+        
+        # Relevância para a query
+        query_words = query.lower().split()
+        response_lower = response.lower()
+        relevant_words = sum(1 for word in query_words if word in response_lower)
+        if query_words:
+            score += (relevant_words / len(query_words)) * 0.4
+        
+        # Estruturação
+        if '. ' in response or '\n' in response:
+            score += 0.3
+        
+        return min(score, 1.0)
 
 # Instância global do motor de fusão
 fusion_engine = CognitiveFusionEngine()

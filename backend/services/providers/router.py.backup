@@ -1,3 +1,6 @@
+from services.cognitive_absorber import cognitive_absorber
+from services.knowledge_fusion.fusion_engine import fusion_engine
+from services.quality_optimization.quality_enhancer import quality_enhancer
 from typing import Dict, List, Any, Generator, Optional
 from .openai import OpenAIProvider
 from .groq import GroqProvider
@@ -105,56 +108,8 @@ class ProviderRouter:
         
         # Seleção inteligente de modelo padrão baseado no provider
         if not model:
-            model = self._get_default_model(provider_instance)
+                
         
-        return provider_instance.generate(
-            messages=messages,
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            stream=stream
-        )
-    
-    def _get_default_model(self, provider_instance) -> str:
-        """Retorna o modelo padrão baseado no tipo de provider"""
-        if isinstance(provider_instance, OpenAIProvider):
-            return "gpt-3.5-turbo"
-        elif isinstance(provider_instance, GroqProvider):
-            return "llama3-8b-8192"
-        elif isinstance(provider_instance, OpenRouterProvider):
-            return "openai/gpt-3.5-turbo"
-        return "gpt-3.5-turbo"
-    
-    async def agenerate(self, 
-                       messages: List[Dict[str, str]], 
-                       model: str = None,
-                       provider: str = None,
-                       temperature: float = 0.7,
-                       max_tokens: int = 1000) -> Dict[str, Any]:
-        """Versão assíncrona do generate"""
-        provider_instance = self.get_provider(provider)
-        
-        if not provider_instance:
-            return {
-                "ok": False,
-                "error": "Nenhum provider LLM disponível",
-                "text": ""
-            }
-        
-        if not model:
-            model = self._get_default_model(provider_instance)
-        
-        return await provider_instance.agenerate(
-            messages=messages,
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-    
-    def list_available_providers(self) -> List[str]:
-        """Lista todos os providers disponíveis"""
-        return list(self.providers.keys())
-    
-    def is_provider_available(self, provider_name: str) -> bool:
-        """Verifica se um provider específico está disponível"""
-        return provider_name in self.providers
+            def list_available_providers(self) -> List[str]:
+            """Lista todos os providers disponíveis"""
+            return list(self.providers.keys())
