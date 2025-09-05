@@ -1,6 +1,6 @@
 # backend/services/file_service.py
 import os
-import fitz  # PyMuPDF para PDF
+from pypdf import PdfReader  # pypdf para PDF
 import docx
 from pathlib import Path
 
@@ -16,9 +16,9 @@ def extract_text_from_file(path: Path) -> str:
 
         elif ext == ".pdf":
             text = ""
-            doc = fitz.open(path)
-            for page in doc:
-                text += page.get_text()
+            doc = PdfReader(path)
+            for page in doc.pages:
+                text += page.extract_text()
             return text
 
         elif ext == ".docx":
@@ -26,8 +26,8 @@ def extract_text_from_file(path: Path) -> str:
             return "\n".join(p.text for p in doc.paragraphs)
 
         elif ext in [".jpg", ".jpeg", ".png"]:
-            import pytesseract
-            from PIL import Image
+            # import pytesseract
+            # from PIL import Image
             return pytesseract.image_to_string(Image.open(path))
 
         elif ext in [".mp3", ".wav"]:

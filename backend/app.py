@@ -6,7 +6,7 @@ import redis
 import logging
 
 from config import config
-from routes import auth, chat, voice, cooperative, super_compute, modes, uploads
+# from routes import auth, chat, voice, cooperative, super_compute, modes, uploads
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
