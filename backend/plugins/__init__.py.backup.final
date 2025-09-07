@@ -1,0 +1,50 @@
+"""
+Package de plugins da NENO IA
+"""
+
+from .web_search import WebSearchPlugin
+from .calculator import CalculatorPlugin
+from .code_executor import CodeExecutorPlugin
+from .image_generator import ImageGeneratorPlugin
+from .animacao_3d import Animacao3DPlugin
+from .viz_engine import VizEnginePlugin
+from .physics_plugin import PhysicsPlugin
+
+# Importação condicional para evitar erros
+try:
+    from .super_ia_module import SuperIAPlugin
+    SUPER_IA_LOADED = True
+except ImportError:
+    print("⚠️  SuperIAPlugin não disponível - Continuando sem ele")
+    SUPER_IA_LOADED = False
+
+try:
+    from .imax_interface_termux import IMAXTerminalInterface
+    IMAX_LOADED = True
+except ImportError:
+    print("⚠️  IMAXInterface não disponível - Continuando sem ele")
+    IMAX_LOADED = False
+
+__all__ = [
+    # Plugins Principais
+    'WebSearchPlugin',
+    'CalculatorPlugin', 
+    'CodeExecutorPlugin',
+    'ImageGeneratorPlugin',
+    'Animacao3DPlugin',
+    
+    # Plugins Avançados
+    'VizEnginePlugin', 
+    'PhysicsPlugin',
+]
+
+# Adicionar condicionalmente ao __all__
+if SUPER_IA_LOADED:
+    __all__.append('SuperIAPlugin')
+    print("✅ SuperIAPlugin carregado")
+
+if IMAX_LOADED:
+    __all__.append('IMAXTerminalInterface')
+    print("✅ IMAXTerminalInterface carregado")
+
+print(f"🎯 Plugins carregados: {len(__all__)} módulos disponíveis")

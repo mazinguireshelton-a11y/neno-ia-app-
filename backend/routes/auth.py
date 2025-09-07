@@ -1,51 +1,43 @@
 """
 Authentication Routes - FastAPI Version
 """
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer
-from typing import Dict, Any
+from fastapi import APIRouter, HTTPException, Depends, status
+from pydantic import BaseModel
+from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# Simulated user database
-fake_users_db = {
-    "admin": {
-        "username": "admin",
-        "password": "admin123",  # In production, use hashed passwords
-        "disabled": False,
-    }
-}
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
-@router.post("/login")
-async def login(username: str, password: str):
-    """Login endpoint"""
+class UserResponse(BaseModel):
+    username: str
+    authenticated: bool
+
+@router.post("/login", response_model=UserResponse)
+async def login(credentials: LoginRequest):
     try:
-        user = fake_users_db.get(username)
-        if not user or user["password"] != password:
-            raise HTTPException(status_code=401, detail="Invalid credentials")
-        
-        return {
-            "success": True,
-            "message": "Login successful",
-            "user": {
-                "username": user["username"],
-                "disabled": user["disabled"]
-            }
-        }
+        if credentials.username == "admin" and credentials.password == "admin":
+            return UserResponse(username=credentials.username, authenticated=True)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid credentials"
+            )
     except Exception as e:
         logger.error(f"Login error: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
 
-@router.get("/me")
+@router.get("/me", response_model=UserResponse)
 async def get_current_user():
-    """Get current user info"""
-    return {"user": "admin", "authenticated": True}
+    return UserResponse(username="admin", authenticated=True)
 
 @router.post("/logout")
 async def logout():
-    """Logout endpoint"""
-    return {"success": True, "message": "Logged out successfully"}
-
-# Optional: Add more authentication endpoints as needed
+    return {"message": "Logged out successfully"}

@@ -1,51 +1,44 @@
-# backend/routes/modes.py
-from flask import Blueprint, request, jsonify, current_app
+"""
+Modes Routes - FastAPI Version
+"""
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import Dict, Any
+import logging
 
-modes_bp = Blueprint("modes_bp", __name__)
+logger = logging.getLogger(__name__)
+router = APIRouter()
 
-@modes_bp.route("/modes", methods=["GET"])
-def list_modes():
-    """Lista todos os modos disponíveis"""
+class ModeSwitchRequest(BaseModel):
+    mode: str
+    parameters: Dict[str, Any] = {}
+
+@router.post("/switch")
+async def switch_mode(request: ModeSwitchRequest):
     try:
-        result = current_app.mode_manager.list_modes()
-        return jsonify(result)
+        # Simulate mode switching
+        return {
+            "success": True,
+            "new_mode": request.mode,
+            "message": f"Switched to {request.mode} mode"
+        }
     except Exception as e:
-        current_app.logger.error(f"Erro ao listar modos: {e}")
-        return jsonify({"ok": False, "error": str(e)}), 500
+        logger.error(f"Mode switch error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-@modes_bp.route("/modes/current", methods=["GET"])
-def get_current_mode():
-    """Retorna o modo atual"""
+@router.get("/current")
+async def get_current_mode():
     try:
-        result = current_app.mode_manager.get_current_mode()
-        return jsonify(result)
+        return {"current_mode": "standard"}
     except Exception as e:
-        current_app.logger.error(f"Erro ao obter modo atual: {e}")
-        return jsonify({"ok": False, "error": str(e)}), 500
+        logger.error(f"Current mode error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-@modes_bp.route("/modes/set", methods=["POST"])
-def set_mode():
-    """Define o modo ativo"""
+@router.get("/available")
+async def get_available_modes():
     try:
-        data = request.get_json() or {}
-        mode_name = data.get("mode", "default")
-        
-        result = current_app.mode_manager.set_mode(mode_name)
-        return jsonify(result)
+        modes = ["standard", "advanced", "creative", "precise"]
+        return {"modes": modes}
     except Exception as e:
-        current_app.logger.error(f"Erro ao definir modo: {e}")
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-@modes_bp.route("/modes/exec", methods=["POST"])
-def execute_mode():
-    """Executa uma ação no modo atual"""
-    try:
-        data = request.get_json() or {}
-        message = data.get("message", "")
-        params = data.get("params", {})
-        
-        result = current_app.mode_manager.handle_request(message, params)
-        return jsonify(result)
-    except Exception as e:
-        current_app.logger.error(f"Erro ao executar modo: {e}")
-        return jsonify({"ok": False, "error": str(e)}), 500
+        logger.error(f"Available modes error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

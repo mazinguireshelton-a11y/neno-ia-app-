@@ -130,3 +130,7 @@ class VisualizationEngine:
 
 def register():
     return VisualizationEngine()
+
+# Instância global
+viz_engine = VisualizationEngine()
+

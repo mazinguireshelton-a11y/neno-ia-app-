@@ -197,3 +197,7 @@ class SuperAIModule:
 # Registro do plugin
 def register():
     return SuperAIModule()
+
+# Instância global para compatibilidade
+super_ai = SuperAIModule()
+
