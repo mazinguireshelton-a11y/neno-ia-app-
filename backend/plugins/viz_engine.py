@@ -1,3 +1,4 @@
+import numpy as np
 # backend/plugins/viz_engine.py
 import plotly.graph_objects as go
 import plotly.express as px

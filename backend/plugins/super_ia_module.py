@@ -12,13 +12,20 @@ from services.compute_cluster import compute_cluster
 
 logger = logging.getLogger(__name__)
 
-class SuperAIModule:
+class SuperIAPlugin:
     def __init__(self):
+        self.name = "Super IA"
+        self.version = "2.0"
+        self.description = "Módulo de Super IA para computação avançada"
         self.local_workers = 8
         # Obtém endpoints do cluster
         self.cloud_endpoints = compute_cluster.get_worker_endpoints()
         self.knowledge_base = {}
         self.optimization_enabled = True
+        
+    def process(self, input_text):
+        """Processa input com IA"""
+        return f"Super IA processou: {input_text}"
         
     def solve_linear_system(self, A: np.ndarray, b: np.ndarray) -> Dict:
         """Resolve sistema linear com método inteligente"""
@@ -194,10 +201,15 @@ class SuperAIModule:
             logger.error(f"Erro no SuperAIModule: {e}")
             return {"success": False, "error": str(e)}
 
-# Registro do plugin
+# Instância global CORRETA
+super_ia_instance = SuperIAPlugin()
+
+# Funções de registro CORRETAS
 def register():
-    return SuperAIModule()
+    return super_ia_instance
 
-# Instância global para compatibilidade
-super_ai = SuperAIModule()
+def get_plugin():
+    return super_ia_instance
 
+# Alias para compatibilidade com código existente
+super_ia = super_ia_instance

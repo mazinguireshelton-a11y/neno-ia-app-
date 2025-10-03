@@ -1,0 +1,15 @@
+./services/llm_service.py
+./services/__init__.py
+./services/compute/__init__.py
+./services/groq_provider.py
+./services/openai_provider.py
+./services/openrouter_provider.py
+./services/router.py
+./services_backup/llm_service.py
+./services_backup/__init__.py
+./services_backup/compute/__init__.py
+./services_backup/groq_provider.py
+./services_backup/openai_provider.py
+./services_backup/openrouter_provider.py
+./services_backup/router.py
+./apply_fixes.py

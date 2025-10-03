@@ -1,4 +1,4 @@
-from services.providers.router import ProviderRouter
+from services.router import ProviderRouter
 """
 Serviço centralizado para gerenciamento de modelos de linguagem
 """
@@ -23,7 +23,7 @@ class LLMService:
         # OpenAI
         if os.getenv("OPENAI_API_KEY"):
             try:
-                from .openai_provider import OpenAIProvider
+                from services.openai_provider import OpenAIProvider
                 providers["openai"] = OpenAIProvider()
                 logger.info("✅ Provedor OpenAI inicializado")
             except Exception as e:
@@ -32,7 +32,7 @@ class LLMService:
         # OpenRouter
         if os.getenv("OPENROUTER_API_KEY"):
             try:
-                from .openrouter_provider import OpenRouterProvider
+                from services.openrouter_provider import OpenRouterProvider
                 providers["openrouter"] = OpenRouterProvider()
                 logger.info("✅ Provedor OpenRouter inicializado")
             except Exception as e:
@@ -41,7 +41,7 @@ class LLMService:
         # Groq
         if os.getenv("GROQ_API_KEY"):
             try:
-                from .groq_provider import GroqProvider
+                from services.groq_provider import GroqProvider
                 providers["groq"] = GroqProvider()
                 logger.info("✅ Provedor Groq inicializado")
             except Exception as e:
@@ -50,7 +50,7 @@ class LLMService:
         # Local (Ollama, etc)
         if os.getenv("LOCAL_LLM_URL"):
             try:
-                from .local_provider import LocalProvider
+                from services.local_provider import LocalProvider
                 providers["local"] = LocalProvider()
                 logger.info("✅ Provedor Local inicializado")
             except Exception as e:
@@ -77,7 +77,7 @@ class LLMService:
     def _init_cooperative_system(self):
         """Inicializa sistema cooperativo"""
         try:
-            from .cooperative_orchestrator import init_cooperative_orchestrator
+            from services.cooperative_orchestrator import init_cooperative_orchestrator
             self.cooperative_orchestrator = init_cooperative_orchestrator(self)
             logger.info("✅ Sistema cooperativo inicializado")
         except Exception as e:

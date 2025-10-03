@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 import time
 from functools import wraps
-from flask import request, current_app
+from fastapi import request, current_app
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 

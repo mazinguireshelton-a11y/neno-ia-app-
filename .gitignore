@@ -46,3 +46,12 @@ uploads/
 # OS
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
+*.db
+*.log
+backups/
+
+# Ignore bancos locais
+data/*.db
+

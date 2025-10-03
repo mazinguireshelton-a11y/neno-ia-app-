@@ -1,0 +1,14 @@
+{
+  "total_generated": 2,
+  "successful_generations": 2,
+  "failed_generations": 0,
+  "total_size_gb": 0.0005798563361167908,
+  "styles_used": {
+    "realistic": 2
+  },
+  "categories_used": {
+    "fantasy": 1,
+    "realistic": 1
+  },
+  "start_time": "2025-09-15T22:49:01.203668"
+}

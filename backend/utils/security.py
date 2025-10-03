@@ -5,7 +5,7 @@ import re
 import html
 import uuid
 from functools import wraps
-from flask import request, jsonify, current_app
+from fastapi import request, jsonify, current_app
 
 def sanitize_input(text: str, max_length: int = 4000) -> str:
     """

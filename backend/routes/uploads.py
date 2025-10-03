@@ -21,7 +21,7 @@ class UploadResponse(BaseModel):
     file_type: Optional[str] = None
 
 @router.post("/file", response_model=UploadResponse)
-async def upload_file(file: UploadFile = File(...)):
+async async def upload_file(file: UploadFile = File(...)):
     try:
         # Create temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=file.filename) as tmp_file:
@@ -48,7 +48,7 @@ async def upload_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/supported-formats")
-async def get_supported_formats():
+async async def get_supported_formats():
     try:
         formats = [".txt", ".pdf", ".docx", ".csv", ".json"]
         return {"supported_formats": formats}

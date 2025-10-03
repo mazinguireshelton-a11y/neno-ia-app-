@@ -1,51 +1,41 @@
 """
-📦 PLUGINS DO NENO IA - Mapeamento Correto e Definitivo
+Plugins do NENO - Sistema de Geração de Imagens
 """
-
 import importlib
-from typing import Dict, Any
+from pathlib import Path
 
-# MAPEAMENTO CORRETO baseado na análise REAL dos arquivos
-PLUGIN_MAPPING = {
-    'web_search': ('WebSearchPlugin', True),
-    'calculator': ('CalculatorPlugin', True),
-    'code_executor': ('CodeExecutorPlugin', True), 
-    'image_generator': ('ImageGeneratorPlugin', True),
-    'animacao_3d': ('get_plugin', False),  # Função que retorna plugin
-    'viz_engine': ('VisualizationEngine', True),  # Correto!
-    'physics_plugin': ('PhysicsPlugin', True),    # Correto!
-    'super_ia_module': ('SuperIAPlugin', True),
-    'imax_interface_termux': ('IMAXTerminalInterface', True)
-}
+def load_plugins():
+    """Carrega todos os plugins disponíveis"""
+    plugins = {}
+    plugins_dir = Path(__file__).parent
+    
+    # Mapeamento manual dos plugins
+    plugin_mapping = {
+        'web_search': ('web_search', 'WebSearchPlugin'),
+        'calculator': ('calculator', 'CalculatorPlugin'),
+        'code_executor': ('code_executor', 'CodeExecutorPlugin'),
+        'image_generator': ('image_generator', 'register_image_generator'),
+        'animacao_3d': ('animacao_3d', 'get_plugin'),
+        'viz_engine': ('viz_engine', 'VisualizationEngine'),
+        'physics_plugin': ('physics_plugin', 'PhysicsPlugin'),
+        'super_ia_module': ('super_ia_module', 'SuperIAPlugin'),
+        'imax_interface_termux': ('imax_interface_termux', 'IMAXTerminalInterface')
+    }
+    
+    for plugin_name, (module_name, attr_name) in plugin_mapping.items():
+        try:
+            module = importlib.import_module(f'plugins.{module_name}')
+            plugin_func = getattr(module, attr_name)
+            plugins[plugin_name] = plugin_func()
+            print(f'✅ {plugin_name} carregado como {attr_name}')
+        except Exception as e:
+            print(f'⚠️  {plugin_name} não disponível: {e}')
+    
+    return plugins
 
-PLUGINS = {}
-
-print("🔧 Carregando plugins com mapeamento CORRETO...")
-
-for module_name, (import_name, is_class) in PLUGIN_MAPPING.items():
-    try:
-        module = importlib.import_module(f'.{module_name}', __package__)
-        
-        if is_class:
-            plugin_class = getattr(module, import_name)
-            PLUGINS[module_name] = plugin_class()
-        else:
-            plugin_func = getattr(module, import_name)
-            PLUGINS[module_name] = plugin_func()
-            
-        print(f"✅ {module_name} carregado como {import_name}")
-        
-    except Exception as e:
-        print(f"⚠️  {module_name} não disponível: {e}")
-
-# Funções de interface
-def get_plugin(nome: str):
-    """Retorna um plugin pelo nome"""
-    return PLUGINS.get(nome)
-
-def listar_plugins() -> Dict[str, Any]:
-    """Lista todos os plugins carregados"""
-    return {nome: type(plugin).__name__ for nome, plugin in PLUGINS.items()}
-
-print(f"🎯 {len(PLUGINS)} plugins carregados com sucesso!")
-print(f"📋 Plugins disponíveis: {list(PLUGINS.keys())}")
+# Carregamento rápido para teste
+if __name__ == '__main__':
+    print("🔧 Carregando plugins...")
+    plugins = load_plugins()
+    print(f"🎯 {len(plugins)} plugins carregados com sucesso!")
+    print("📋 Plugins disponíveis:", list(plugins.keys()))

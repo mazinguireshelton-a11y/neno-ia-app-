@@ -14,7 +14,7 @@ class ModeSwitchRequest(BaseModel):
     parameters: Dict[str, Any] = {}
 
 @router.post("/switch")
-async def switch_mode(request: ModeSwitchRequest):
+async async def switch_mode(request: ModeSwitchRequest):
     try:
         # Simulate mode switching
         return {
@@ -27,7 +27,7 @@ async def switch_mode(request: ModeSwitchRequest):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/current")
-async def get_current_mode():
+async async def get_current_mode():
     try:
         return {"current_mode": "standard"}
     except Exception as e:
@@ -35,7 +35,7 @@ async def get_current_mode():
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/available")
-async def get_available_modes():
+async async def get_available_modes():
     try:
         modes = ["standard", "advanced", "creative", "precise"]
         return {"modes": modes}

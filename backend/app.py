@@ -1,3 +1,10 @@
+import sys
+sys.path.insert(0, ".")
+try:
+    import aiosqlite
+except ImportError:
+    import aiosqlite
+from aiosqlite import connect as aiosqlite_connect
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -13,13 +20,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async async def lifespan(app: FastAPI):
     # Startup
     logger.info("🚀 Iniciando NENO IA Backend")
     
     # Conectar ao banco
     try:
-        app.state.db = await aiosqlite.connect(config.DATABASE_URL)
+        app.state.db = await aiosqlite_connect("data/neno_ia.db")
         logger.info("✅ Conectado ao banco de dados")
     except Exception as e:
         logger.error(f"❌ Erro ao conectar ao banco: {e}")
@@ -43,6 +50,8 @@ async def lifespan(app: FastAPI):
         app.state.redis.close()
 
 app = FastAPI(
+
+# CORS\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=["*"],\n    allow_credentials=True,\n    allow_methods=["*"],\n    allow_headers=["*"],\n)
     title="NENO IA API",
     description="API da IA mais poderosa do mundo",
     version="1.0.0",
@@ -68,11 +77,11 @@ app.include_router(modes.router, prefix="/modes", tags=["modes"])
 app.include_router(uploads.router, prefix="/uploads", tags=["uploads"])
 
 @app.get("/")
-async def root():
+async async def root():
     return {"message": "🚀 NENO IA API está funcionando!", "version": "1.0.0"}
 
 @app.get("/health")
-async def health_check():
+async async def health_check():
     return {
         "status": "healthy",
         "database": "connected" if app.state.db else "disconnected",
@@ -81,4 +90,14 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
+
+# ==================== FUNÇÃO MAIN ====================
+async def main():
+    """Função principal para iniciar a aplicação"""
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")
+
+if __name__ == "__main__":
+    main()
+# ==================== FIM DA FUNÇÃO MAIN ====================

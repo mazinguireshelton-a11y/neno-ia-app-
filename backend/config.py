@@ -1,27 +1,20 @@
 import os
-from dotenv import load_dotenv
+from dataclasses import dataclass
 
-load_dotenv()
-
+@dataclass
 class Config:
-    # Database
-    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+    # Banco de dados - Usa Supabase PostgreSQL por padrão
+    DATABASE_URL: str = os.getenv("DATABASE_URL", os.getenv("SUPABASE_DB_URL", "sqlite+aiosqlite:///data/neno_ia.db"))
+    
+    # Supabase
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
     
     # Redis
-    REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
     
-    # API Keys
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    GROQ_API_KEY = os.getenv("GROQ_API_KEY") 
-    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-    
-    # App
-    SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-key-change-in-production")
-    ALGORITHM = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
-    
-    # Deployment
-    ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
-    DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+    # Configurações
+    DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
+    PORT: int = int(os.getenv("PORT", "8000"))
 
 config = Config()

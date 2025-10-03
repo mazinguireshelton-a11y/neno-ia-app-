@@ -18,7 +18,7 @@ class UserResponse(BaseModel):
     authenticated: bool
 
 @router.post("/login", response_model=UserResponse)
-async def login(credentials: LoginRequest):
+async async def login(credentials: LoginRequest):
     try:
         if credentials.username == "admin" and credentials.password == "admin":
             return UserResponse(username=credentials.username, authenticated=True)
@@ -35,9 +35,9 @@ async def login(credentials: LoginRequest):
         )
 
 @router.get("/me", response_model=UserResponse)
-async def get_current_user():
+async async def get_current_user():
     return UserResponse(username="admin", authenticated=True)
 
 @router.post("/logout")
-async def logout():
+async async def logout():
     return {"message": "Logged out successfully"}

@@ -1,0 +1,19 @@
+# requirements-termux.txt - recomendado para Termux (evita compilar Rust/C++)
+fastapi==0.95.2
+uvicorn==0.24.0
+python-multipart==0.0.6
+redis==5.0.1
+openai==1.3.0
+httpx==0.25.2
+pydantic==1.10.14
+sqlalchemy==2.0.23
+python-jose==3.3.0
+passlib==1.7.4
+bcrypt==4.0.1
+python-dotenv==1.0.0
+aiofiles==23.2.1
+
+# Alternativa leve ao grpcio em Termux:
+grpclib==0.4.4
+
+# Não incluir grpcio / pydantic-core / pyqt5 aqui — muito pesado no Termux
