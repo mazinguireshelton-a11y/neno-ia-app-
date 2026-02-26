@@ -16,7 +16,7 @@ class CooperativeRequest(BaseModel):
     agents: List[str] = []
 
 @router.post("/execute")
-async async def execute_cooperative_task(request: CooperativeRequest):
+async def execute_cooperative_task(request: CooperativeRequest):
     try:
         result = await cooperative_orchestrator.orchestrate_task(
             request.task,
@@ -33,7 +33,7 @@ async async def execute_cooperative_task(request: CooperativeRequest):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/agents")
-async async def get_available_agents():
+async def get_available_agents():
     try:
         agents = await cooperative_orchestrator.get_available_agents()
         return {"agents": agents}

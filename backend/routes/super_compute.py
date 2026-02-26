@@ -19,7 +19,7 @@ class ComputeRequest(BaseModel):
     generate_visualization: bool = False
 
 @router.post("/api/super-compute")
-async async def super_compute_endpoint(request: ComputeRequest):
+async def super_compute_endpoint(request: ComputeRequest):
     try:
         if request.optimize:
             from services.smart_optimizer import smart_optimizer

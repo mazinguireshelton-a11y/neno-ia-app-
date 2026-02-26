@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
-async async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):
     # Startup
     logger.info("🚀 Iniciando NENO IA Backend")
     
@@ -77,11 +77,11 @@ app.include_router(modes.router, prefix="/modes", tags=["modes"])
 app.include_router(uploads.router, prefix="/uploads", tags=["uploads"])
 
 @app.get("/")
-async async def root():
+async def root():
     return {"message": "🚀 NENO IA API está funcionando!", "version": "1.0.0"}
 
 @app.get("/health")
-async async def health_check():
+async def health_check():
     return {
         "status": "healthy",
         "database": "connected" if app.state.db else "disconnected",

@@ -16,7 +16,7 @@ class VoiceResponse(BaseModel):
     language: Optional[str] = None
 
 @router.post("/speech-to-text", response_model=VoiceResponse)
-async async def speech_to_text(file: UploadFile = File(...)):
+async def speech_to_text(file: UploadFile = File(...)):
     try:
         result = await voice_service.speech_to_text(file)
         return VoiceResponse(
@@ -29,7 +29,7 @@ async async def speech_to_text(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/text-to-speech")
-async async def text_to_speech(text: str, voice: str = "default"):
+async def text_to_speech(text: str, voice: str = "default"):
     try:
         result = await voice_service.text_to_speech(text, voice)
         return result
@@ -38,7 +38,7 @@ async async def text_to_speech(text: str, voice: str = "default"):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/voices")
-async async def get_available_voices():
+async def get_available_voices():
     try:
         voices = await voice_service.get_available_voices()
         return {"voices": voices}

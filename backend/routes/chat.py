@@ -22,7 +22,7 @@ class ChatResponse(BaseModel):
     tokens_used: int
 
 @router.post("/message", response_model=ChatResponse)
-async async def send_message(chat_message: ChatMessage):
+async def send_message(chat_message: ChatMessage):
     try:
         response = await llm_service.process_message(
             chat_message.message,
@@ -39,7 +39,7 @@ async async def send_message(chat_message: ChatMessage):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.websocket("/ws")
-async async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
@@ -61,7 +61,7 @@ async async def websocket_endpoint(websocket: WebSocket):
         await websocket.close(code=1011)
 
 @router.get("/conversations")
-async async def get_conversations():
+async def get_conversations():
     try:
         # Implementar lógica de listagem de conversas
         return {"conversations": []}
