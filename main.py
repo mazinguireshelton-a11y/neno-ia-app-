@@ -1,47 +1,45 @@
-import sys
+#!/usr/bin/env python3
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import importlib.util
 import os
 
-print("=== DIAGNÓSTICO ===")
-print(f"Python: {sys.version}")
-print(f"Diretório atual: {os.getcwd()}")
-print(f"Arquivos no diretório: {os.listdir('.')}")
-print(f"PORT environment: {os.getenv('PORT', 'não definida')}")
-print("===================")
+app = FastAPI(title="NENO IA API", version="2.0.0")
 
-from fastapi import FastAPI
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Criar a aplicação FastAPI
-app = FastAPI(title="Neno IA App", version="1.0.0")
+# Importar rotas migradas
+routes_dir = "backend/routes"
+for route_file in os.listdir(routes_dir):
+    if route_file.endswith(".py") and route_file != "__init__.py":
+        module_name = route_file[:-3]
+        spec = importlib.util.spec_from_file_location(module_name, f"{routes_dir}/{route_file}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        
+        if hasattr(module, 'router'):
+            app.include_router(module.router, prefix="/api")
+            print(f"✅ Rota {module_name} carregada")
+
+# Arquivos estáticos
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def root():
-    return {
-        "message": "API funcionando!",
-        "status": "online",
-        "environment": os.getenv("ENVIRONMENT", "production")
-    }
+    return {"message": "NENO IA FastAPI está funcionando!"}
 
 @app.get("/health")
 async def health():
-    return {
-        "status": "healthy",
-        "python": sys.version.split()[0],
-        "app": "Neno IA App"
-    }
+    return {"status": "healthy"}
 
-@app.get("/teste")
-async def teste():
-    return {"mensagem": "Rota de teste funcionando!"}
-
-# Este bloco só executa se rodar diretamente (python main.py)
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
-    print(f"🚀 Iniciando servidor na porta {port}")
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=port,
-        reload=False,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=5000)
